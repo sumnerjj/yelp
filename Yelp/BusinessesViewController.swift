@@ -11,12 +11,12 @@ import UIKit
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate {
     
     var businesses: [Business]!
+    var searchBar = UISearchBar()
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var searchBar = UISearchBar()
         searchBar.sizeToFit()
         navigationItem.titleView = searchBar
 
@@ -59,6 +59,20 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         // Dispose of any resources that can be recreated.
     }
     
+    /* 
+     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("button clicked")
+        //offset = 0
+        //searchBar.resignFirstResponder()
+        //loadData(searchText: self.searchBar.text!)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print("began editing")
+        //self.searchBar.showsCancelButton = true
+    } 
+     */
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if businesses != nil{
             return businesses.count
@@ -84,7 +98,8 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         
         var categories = filters["categories"] as? [String]
 
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil, completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: ("Restaurants" + searchBar.text!), sort: nil, categories: categories, deals: nil, completion: { (businesses: [Business]?, error: Error?) -> Void in
+            print("searching now asd")
             self.businesses = businesses
             self.tableView.reloadData()
         }
