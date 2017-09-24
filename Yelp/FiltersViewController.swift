@@ -19,6 +19,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     var categories : [[String:String]] = []
     
     var switchStates = [Int:Bool]()
+    let CellIdentifier = "TableViewCell", HeaderViewIdentifier = "TableViewHeaderView"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,9 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         categories = yelpCategories()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: HeaderViewIdentifier)
+        
 
         // Do any additional setup after loading the view.
     }
