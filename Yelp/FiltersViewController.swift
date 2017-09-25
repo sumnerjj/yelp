@@ -19,10 +19,12 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     var categories : [[String:String]] = []
     var sort_labels : [String] = ["Best Match", "Distance", "Rating"]
     var distance_labels : [String] = ["0.5 mi", "1 mi", "2 mi", "5 mi", "10 mi", "20 mi"]
+    var deal_labels : [String] = ["Offering Deals"]
     
     var switchStates = [Int:Bool]()
     var sortStates = [Int:Bool]()
     var distanceStates = [Int:Bool]()
+    var dealStates = [Int:Bool]()
     let CellIdentifier = "SwitchCell", HeaderViewIdentifier = "TableViewHeaderView"
     
     override func viewDidLoad() {
@@ -108,8 +110,8 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.onSwitch.isOn = distanceStates[indexPath.row] ?? false
         }
         else if indexPath.section == 2 {
-            cell.switchLabel.text = "Deals"
-            cell.onSwitch.isOn = distanceStates[indexPath.row] ?? false
+            cell.switchLabel.text = deal_labels[indexPath.row]
+            cell.onSwitch.isOn = dealStates[indexPath.row] ?? false
         }
         else if indexPath.section == 3 {
             cell.switchLabel.text = categories[indexPath.row]["name"]
@@ -129,7 +131,21 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: switchCell)!
-        switchStates[indexPath.row] = value
+        
+        if indexPath.section == 0 {
+            sortStates = [0: false, 1: false, 2:false]
+            sortStates[indexPath.row] = value
+        }
+        else if indexPath.section == 1 {
+            distanceStates = [0: false, 1: false, 2:false, 3:false, 4:false, 5:false]
+            distanceStates[indexPath.row] = value
+        }
+        else if indexPath.section == 2 {
+            dealStates[indexPath.row] = value
+        }
+        else if indexPath.section == 3 {
+            switchStates[indexPath.row] = value
+        }
         print("filters view controller got switch event")
     }
     
