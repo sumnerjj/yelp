@@ -64,10 +64,10 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             filters["categories"] = selectedCategories as AnyObject
         }
         
-        var sort_filter : Int = 0
+        var sort_filter : YelpSortMode?
         for (row,isSelected) in sortStates {
             if isSelected {
-                sort_filter = row
+                sort_filter = YelpSortMode(rawValue: row)
                 filters["sort"] = sort_filter as AnyObject
             }
         }

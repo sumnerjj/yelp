@@ -98,9 +98,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         print("filters asd")
         print(filters)
         print("filters qwe")
-        var categories = filters["categories"] as? [String]
+        let categories = filters["categories"] as? [String]
+        let distance = filters["distance"] as? Int
+        let deals = filters["deals"] as? Bool
+        let sort = filters["sort"] as? YelpSortMode
 
-        Business.searchWithTerm(term: ("Restaurants" + searchBar.text!), sort: nil, categories: categories, deals: nil, completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: ("Restaurants" + searchBar.text!), sort: sort, categories: categories, deals: deals, completion: { (businesses: [Business]?, error: Error?) -> Void in
             print("searching now asd")
             self.businesses = businesses
             self.tableView.reloadData()
