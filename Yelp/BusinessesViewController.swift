@@ -95,7 +95,9 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        
+        print("filters asd")
+        print(filters)
+        print("filters qwe")
         var categories = filters["categories"] as? [String]
 
         Business.searchWithTerm(term: ("Restaurants" + searchBar.text!), sort: nil, categories: categories, deals: nil, completion: { (businesses: [Business]?, error: Error?) -> Void in

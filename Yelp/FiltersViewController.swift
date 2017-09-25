@@ -24,7 +24,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     var switchStates = [Int:Bool]()
     var sortStates = [Int:Bool]()
     var distanceStates = [Int:Bool]()
-    var dealStates = [Int:Bool]()
+    var dealState : Bool = false
     let CellIdentifier = "SwitchCell", HeaderViewIdentifier = "TableViewHeaderView"
     
     override func viewDidLoad() {
@@ -63,6 +63,28 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         if selectedCategories.count > 0 {
             filters["categories"] = selectedCategories as AnyObject
         }
+        
+        var sort_filter : Int = 0
+        for (row,isSelected) in sortStates {
+            if isSelected {
+                sort_filter = row
+                filters["sort"] = sort_filter as AnyObject
+            }
+        }
+        
+        var distance_filter : Int = 40000
+        for (row,isSelected) in distanceStates {
+            if isSelected {
+                distance_filter = [805, 1610, 3230, 8045, 16090, 32180][row]
+                filters["distance"] = distance_filter as AnyObject
+            }
+        }
+        
+        var deal_filter : Bool = false
+        if dealState {
+            filters["deal_filter"] = true as AnyObject
+        }
+        
         
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
@@ -111,7 +133,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         else if indexPath.section == 2 {
             cell.switchLabel.text = deal_labels[indexPath.row]
-            cell.onSwitch.isOn = dealStates[indexPath.row] ?? false
+            cell.onSwitch.isOn = dealState
         }
         else if indexPath.section == 3 {
             cell.switchLabel.text = categories[indexPath.row]["name"]
@@ -141,7 +163,7 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
             distanceStates[indexPath.row] = value
         }
         else if indexPath.section == 2 {
-            dealStates[indexPath.row] = value
+            dealState = value
         }
         else if indexPath.section == 3 {
             switchStates[indexPath.row] = value
