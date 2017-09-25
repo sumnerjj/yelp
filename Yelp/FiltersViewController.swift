@@ -17,17 +17,22 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var tableView: UITableView!
     weak var delegate: FiltersViewControllerDelegate?
     var categories : [[String:String]] = []
+    var sort_labels : [String] = ["Best Match", "Distance", "Rating"]
+    var distance_labels : [String] = ["0.5 mi", "1 mi", "2 mi", "5 mi", "10 mi", "20 mi"]
     
     var switchStates = [Int:Bool]()
-    let CellIdentifier = "TableViewCell", HeaderViewIdentifier = "TableViewHeaderView"
+    var sortStates = [Int:Bool]()
+    var distanceStates = [Int:Bool]()
+    let CellIdentifier = "SwitchCell", HeaderViewIdentifier = "TableViewHeaderView"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         categories = yelpCategories()
+        let test_data = ["sort_type": ["asd", "qwe"], "categories": categories] as [String : Any]
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
+        //tableView.register(Yelp.SwitchCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: HeaderViewIdentifier)
         
 
@@ -60,8 +65,30 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 4
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        if section == 0 {
+            return 3
+        }
+        else if section == 1 {
+            return 6
+        }
+        else if section == 2 {
+            return 1
+        }
+        else if section == 3 {
+            return categories.count
+        }
+        else {
+            return categories.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return ["Sort", "Distance", "Deals", "Categories"][section]
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,8 +98,34 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
 
         
         cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+        
+        if indexPath.section == 0 {
+            cell.switchLabel.text = sort_labels[indexPath.row]
+            cell.onSwitch.isOn = sortStates[indexPath.row] ?? false
+        }
+        else if indexPath.section == 1 {
+            cell.switchLabel.text = distance_labels[indexPath.row]
+            cell.onSwitch.isOn = distanceStates[indexPath.row] ?? false
+        }
+        else if indexPath.section == 2 {
+            cell.switchLabel.text = "Deals"
+            cell.onSwitch.isOn = distanceStates[indexPath.row] ?? false
+        }
+        else if indexPath.section == 3 {
+            cell.switchLabel.text = categories[indexPath.row]["name"]
+            cell.onSwitch.isOn = switchStates[indexPath.row] ?? false
+        }
+        
         return cell
     }
+    
+    /*
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderViewIdentifier) as! UITableViewHeaderFooterView
+        header.textLabel.text = test_data[section].0
+        return header
+    }
+    */
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: switchCell)!
@@ -80,6 +133,11 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         print("filters view controller got switch event")
     }
     
+    /*
+    func test_data() -> Dictionary<<#Key: Hashable#>, Any> {
+        return ["sort_type": ["asd", "qwe"], "categories": yelpCategories()]
+    }
+    */
     
     func yelpCategories() -> [[String:String]] {
         return [
