@@ -27,7 +27,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
-        Business.searchWithTerm(term: "indian", completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
             self.businesses = businesses
             self.tableView.reloadData()
@@ -95,16 +95,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        print("filters asd")
-        print(filters)
-        print("filters qwe")
         let categories = filters["categories"] as? [String]
         let distance = filters["distance"] as? Int
         let deals = filters["deals"] as? Bool
         let sort = filters["sort"] as? YelpSortMode
 
-        Business.searchWithTerm(term: ("Restaurants" + searchBar.text!), sort: sort, categories: categories, deals: deals, completion: { (businesses: [Business]?, error: Error?) -> Void in
-            print("searching now asd")
+        Business.searchWithTerm(term: ("Restaurants" + searchBar.text!), sort: sort, categories: categories, deals: deals, distance: distance!, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

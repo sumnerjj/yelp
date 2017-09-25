@@ -31,7 +31,6 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
         
         categories = yelpCategories()
-        let test_data = ["sort_type": ["asd", "qwe"], "categories": categories] as [String : Any]
         tableView.delegate = self
         tableView.dataSource = self
         //tableView.register(Yelp.SwitchCell.self, forCellReuseIdentifier: CellIdentifier)
@@ -76,13 +75,12 @@ class FiltersViewController: UIViewController, UITableViewDataSource, UITableVie
         for (row,isSelected) in distanceStates {
             if isSelected {
                 distance_filter = [805, 1610, 3230, 8045, 16090, 32180][row]
-                filters["distance"] = distance_filter as AnyObject
             }
         }
-        
-        var deal_filter : Bool = false
+        filters["distance"] = distance_filter as AnyObject
+
         if dealState {
-            filters["deal_filter"] = true as AnyObject
+            filters["deals"] = true as AnyObject
         }
         
         
